@@ -25,6 +25,7 @@ use fuser::{
     BackingId, FileAttr, FileType, Filesystem, KernelConfig, MountOption, ReplyAttr,
     ReplyDirectory, ReplyEmpty, ReplyEntry, ReplyOpen, Request, consts,
 };
+// nix::errno::Errno (ENOENT)
 use libc::ENOENT;
 use std::collections::HashMap;
 use std::ffi::{OsStr, c_int};
@@ -107,7 +108,9 @@ struct PassthroughFs {
 
 impl PassthroughFs {
     fn new() -> Self {
+        //nix::unistd::getuid
         let uid = unsafe { libc::getuid() };
+        //nix::unistd::getgid
         let gid = unsafe { libc::getgid() };
 
         let root_attr = FileAttr {
