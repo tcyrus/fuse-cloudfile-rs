@@ -4,8 +4,18 @@
 
 /*
 GOAL:
-- Implement FUSE Passthrough to $XDG_DATA_HOME/fuse-sync/drive/
-  - $XDG_DATA_HOME defaults to $HOME/.local/share
+- Implement an Overlay with FUSE Passthrough (if possible):
+  - Option 1: Use original directory file descriptor
+    - Store directory file descriptor before mount
+      - std::path::Path doesn't implement std::os::fd::AsRawFd
+      - Consider using nix::dir::Dir
+    - Interface with files using stored fd as relative point
+      - nix::fcntl::openat, nix::sys::stat::mkdirat, etc
+  - Option 2: Use mount namespaces to access original directory
+    - Unsure on how to actually do this
+  - Option 3: Use unrelated directory as storage
+    - $XDG_DATA_HOME/fuse-sync/drive/
+    - $XDG_DATA_HOME defaults to $HOME/.local/share
 - Implement xattrs (see xattrs.rs)
 - Use embedded db for xattrs
 */
